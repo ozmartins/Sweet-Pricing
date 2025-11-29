@@ -1,0 +1,35 @@
+{% block menu %}
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <span
+                class="bg-white text-primary fw-bold d-inline-flex align-items-center justify-content-center rounded px-2">🧁</span>
+            <span class="fw-bold">Preço doce</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Início</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Compras</a></li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownOthers" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">Outras opções</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownOthers">
+                        <li><a class="dropdown-item" href="#">Fornecedores</a></li>
+                        <li><a class="dropdown-item" href="#">Ingredientes</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="ms-lg-3">
+                <button class="btn btn-light fw-bold rounded-circle btn-sm" type="button">OS</button>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}

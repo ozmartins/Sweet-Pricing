@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block extra_actions %}
+
+<!-- Acrescenta botão que permite cadastrar a receita do produto -->
+<button type="button" class="btn btn-sm btn-outline-primary btn-product-recipe" data-id="{{product.id}}" data-name="{{product.name}}">Receita</button>
+
+{% endblock  %}

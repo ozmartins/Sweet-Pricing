@@ -1,0 +1,268 @@
+{% load static %}
+
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preço Doce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
+
+<body>
+    {% include "menu.html" %}
+    <main class="container my-4">
+        <!-- Título da página -->
+        <div class="card mb-4">
+            <div class="card-body d-flex flex-wrap align-items juntify-center-between gap-2">
+                <h1 class="h5 mb-0">{{ page_data.title }}</h1>
+            </div>
+        </div>
+
+        <!-- seção de busca de registros -->
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <form class="d-flex" method="get" action="">
+                <input type="search" name="q" value="{{ request.GET.q|default:'' }}" class="form-control"
+                    placeholder="Buscar por nome">
+                <button class="btn btn-outline-secondary ms-2" type="submit">Buscar</button>
+            </form>
+            <button class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#newProductModal">{{page_data.new_button_label }}</button>
+        </div>
+
+        <!-- Seção que contém a tabela com os registros da página -->
+        <div class="card">
+            <div class="table-responsive">
+                <table id="entities-table" class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if entities %}
+                        {% for entity in entities %}
+                        <tr data-id="{{entity.id}}">
+                            <td class="text-muted">{{entity.id}}</td>
+                            <td>{{entity.name}}</td>
+                            <td>
+                                {% block extra_actions %} {% endblock %}
+                                <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
+                                    data-id="{{entity.id}}" data-name="{{entity.name}}">Alterar</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
+                                    data-id="{{entity.id}}" data-name="{{entity.name}}">Remover</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                Nenhum produto encontrado.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Seção que mostra a barra de paginação -->
+        {% if page_obj %}
+        <div class="card-body">
+            <nav>
+                <ul class="pagination mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                            <<
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            << 
+                        </span>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}">{{
+                            num
+                            }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ page_obj.next_page_number }}{% if request.GET.q %} &q={{ request.GET.q }}{% endif %}">>></a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">>></span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+
+        <!-- Modal para criação de registros (só a parte visível, sem comportamento ) -->
+        <div class="modal fade" id="newEntityModal" tabindex="-1">
+            <div class="modal-dialog">
+                <form id="newEntityForm" class="modal-content">
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para remoção de registros (só a parte visível, sem comportamento ) -->
+        <div class="modal fade confirm-delete-modal" id="confirmDeleteModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-white">
+                        <h5 class="modal-title">Confirma remoção</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Confirma a remoção do registro?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger confirm-delete-button">Remover</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;">
+        </div>
+
+        {{ page_data|json_script:"page-data" }}
+
+        <script type="module">
+            const page_data = JSON.parse(document.getElementById("page-data").textContent);
+
+            //funções auxiliares
+            const select = (selector, root = document) =>
+                root.querySelector(selector);
+
+            const selectAll = (selector, root = document) =>
+                Array.from(root.querySelectorAll(selector));
+
+            const onEvent = (element, eventName, handler, options) =>
+                element && element.addEventListener(eventName, handler, options)
+
+            const delegateEvent = (root, eventName, selector, handler) =>
+                onEvent(root, eventName, evt => {
+                    const target = evt.target.closest(selector);
+                    if (target && root.contains(target)) {
+                        handler(evt, target);
+                    }
+                })
+
+            const getCookie = name => {
+                const parts = document.cookie?.split(";") ?? [];
+                for (const raw of parts) {
+                    const c = raw.trim();
+                    if (c.startsWith(name + "=")) return decodeURIComponent(c.slice(name.length + 1));
+                }
+                return null;
+            };
+
+            const getCsrfToken = () =>
+                document.querySelector("input[name=csrfmiddlewaretoken]")?.value || getCookie("csrftoken") || "";
+
+            const httpRequest = async (url, { method = "GET", body, headers = {} } = {}) => {
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        ...(method !== "GET" ? { "X-CSRFToken": getCsrfToken() } : {}),
+                        ...headers
+                    },
+                    body
+                });
+                let data = null;
+                try { data = await response.json(); } catch { }
+                return { ok: response.ok, status: response.status, data };
+            };
+
+            const showAlertMessage = (message, type = "success") => {
+                const alertId = "alert-" + Date.now();
+                const markup = `
+                <div id="${alertId}" role="alert" class="alert alert-${type} alert-data-bs-dismissible fade show mt-3 shadown-sm">
+                    ${escapeHTML(message)}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>`
+                select("#alert-container")?.insertAdjacentHTML("beforeend", markup);
+                setTimeout(() => document.getElementById(alertId)?.remove(), 3500);
+            }
+
+            const escapeHTML = text => String(text ?? "").replace(/[&<>"'`=\/]/g, ch => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;"
+            }[ch] || ch));
+
+
+            //Seção responsável pela ativação da modal de remoção de registros
+            const confirmDeleteModal = select(".confirm-delete-modal");
+
+            const getConfirmDeleteModal = () =>
+                bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
+
+            let selectedEntityId = null
+
+            const initDeleteModule = () => {
+
+                delegateEvent(document, "click", ".btn-entity-delete", (_evt, button) => {
+                    selectedEntityId = button.dataset.id ?? "";
+                    getConfirmDeleteModal().show();
+
+                });
+
+                const confirmDeleteButton = select(".confirm-delete-button")
+
+                onEvent(confirmDeleteButton, "click", async () => {
+                    const id = selectedEntityId?.trim();
+
+                    if (!id) return;
+
+                    try {
+                        const deleteUrl = page_data.endpoint_delete.replace("{id}", encodeURIComponent(id));
+                        const { ok } = await httpRequest(deleteUrl, { method: "POST" });
+
+                        if (ok) {
+                            document.querySelector(`tr[data-id="${CSS.escape(id)}"]`)?.remove();
+                            showAlertMessage("Registro removido com sucesso!", "success");
+                        }
+                        else {
+                            showAlertMessage("Erro ao remover registro.", "danger");
+                        }
+                    } catch (error) {
+                        showAlertMessage("Falha de comunicação com o servidor", "danger");
+                    }
+                    finally {
+                        getConfirmDeleteModal().hide();
+                        selectedEntityId = null;
+                    }
+                });
+            };
+
+            document.addEventListener("DOMContentLoaded", initDeleteModule);
+
+            //bootstrap.Modal.getOrCreateInstance(select("#newEntityModal")).show();
+        </script>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
