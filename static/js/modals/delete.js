@@ -2,6 +2,15 @@ const page_data = JSON.parse(document.getElementById("page-data").textContent);
 
 const confirmDeleteModal = select(".confirm-delete-modal");
 
+const ensureEmptyRowIfNeeded = () => {
+            if (!entitiesTbody?.querySelector("tr")) {
+                entitiesTbody.insertAdjacentHTML("beforeend", `
+                    <tr class="empty-row">
+                        <td colspan="3" class="text-center text-muted py-4">Nenhum registro encontrado.</td>
+                    </tr>`);
+            }
+        };
+
 const getConfirmDeleteModal = () =>
     bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
 
@@ -28,6 +37,7 @@ const initDeleteModule = () => {
 
             if (ok) {
                 document.querySelector(`tr[data-id="${CSS.escape(id)}"]`)?.remove();
+                ensureEmptyRowIfNeeded();
                 showAlertMessage("Registro removido com sucesso!", "success");
             }
             else {
@@ -42,3 +52,9 @@ const initDeleteModule = () => {
         }
     });
 };
+
+const initFocusOnDeleteModal = () => {
+    focusPrimaryButtonOnModalShow(deleteConfirmModalElement);
+};
+document.addEventListener("DOMContentLoaded", initDeleteModule);
+document.addEventListener("DOMContentLoaded", initFocusOnDeleteModal);

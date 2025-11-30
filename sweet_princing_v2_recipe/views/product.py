@@ -36,13 +36,6 @@ def product_recover(request):
             "title": "Produtos",
             "new_button_label": "Novo produto",
             "endpoint_delete": "delete/{id}"
-        },
-        "entities": page.object_list,
-        "page_obj": page,
-        "page_data": {
-            "title": "Produtos",
-            "new_button_label": "Novo produto",
-            "endpoint_delete": "delete/{id}"
         }
     })
 

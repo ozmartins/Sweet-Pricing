@@ -1,0 +1,24 @@
+<div class="modal fade" id="newEntityModal" tabindex="-1" aria-labelledby="newEntityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="newEntityForm" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newEntityModalLabel">Novo registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="new-name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="new-name" name="name" maxlength="100" required>
+                    <div class="invalid-feedback" id="new-name-error"></div>
+                </div>
+                <div class="alert alert-danger d-none" id="new-general-error"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Descartar e fechar</button>
+                <button type="submit" class="btn btn-primary" id="btnSaveNew">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -50,3 +50,6 @@ const showAlertMessage = (message, type = "success") => {
 const escapeHTML = text => String(text ?? "").replace(/[&<>"'`=\/]/g, ch => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;"
 }[ch] || ch));
+
+const focusPrimaryButtonOnModalShow = modalEl =>
+    onEvent(modalEl, "shown.bs.modal", () => modalEl.querySelector(".modal-footer .btn.btn-primary")?.focus());
