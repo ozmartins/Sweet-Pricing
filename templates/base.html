@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    
+    {% csrf_token %}
+        
     {% include "menu.html" %}
 
     <main class="container my-4">
@@ -20,155 +21,19 @@
         {% include "search.html" with new_button_label=data.new_button_label %}
         {% include "table.html" with entities=data.entities %}
         {% include "pagination.html" with pagination=data.pagination %}
-        
+        {% include "delete_modal.html" with pagination=data.pagination %}
 
-        <!-- Modal para criação de registros (só a parte visível, sem comportamento ) -->
-        <div class="modal fade" id="newEntityModal" tabindex="-1">
-            <div class="modal-dialog">
-                <form id="newEntityForm" class="modal-content">
-                    {% csrf_token %}
-                </form>
-            </div>
-        </div>
-
-        <!-- Modal para remoção de registros (só a parte visível, sem comportamento ) -->
-        <div class="modal fade confirm-delete-modal" id="confirmDeleteModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-white">
-                        <h5 class="modal-title">Confirma remoção</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        Confirma a remoção do registro?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary"
-                            data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger confirm-delete-button">Remover</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;">
-        </div>
+        <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;"></div>
 
         {{ page_data|json_script:"page-data" }}
 
         <script type="module">
-            const page_data = JSON.parse(document.getElementById("page-data").textContent);
-
-            //funções auxiliares
-            const select = (selector, root = document) =>
-                root.querySelector(selector);
-
-            const selectAll = (selector, root = document) =>
-                Array.from(root.querySelectorAll(selector));
-
-            const onEvent = (element, eventName, handler, options) =>
-                element && element.addEventListener(eventName, handler, options)
-
-            const delegateEvent = (root, eventName, selector, handler) =>
-                onEvent(root, eventName, evt => {
-                    const target = evt.target.closest(selector);
-                    if (target && root.contains(target)) {
-                        handler(evt, target);
-                    }
-                })
-
-            const getCookie = name => {
-                const parts = document.cookie?.split(";") ?? [];
-                for (const raw of parts) {
-                    const c = raw.trim();
-                    if (c.startsWith(name + "=")) return decodeURIComponent(c.slice(name.length + 1));
-                }
-                return null;
-            };
-
-            const getCsrfToken = () =>
-                document.querySelector("input[name=csrfmiddlewaretoken]")?.value || getCookie("csrftoken") || "";
-
-            const httpRequest = async (url, { method = "GET", body, headers = {} } = {}) => {
-                const response = await fetch(url, {
-                    method,
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest",
-                        ...(method !== "GET" ? { "X-CSRFToken": getCsrfToken() } : {}),
-                        ...headers
-                    },
-                    body
-                });
-                let data = null;
-                try { data = await response.json(); } catch { }
-                return { ok: response.ok, status: response.status, data };
-            };
-
-            const showAlertMessage = (message, type = "success") => {
-                const alertId = "alert-" + Date.now();
-                const markup = `
-                <div id="${alertId}" role="alert" class="alert alert-${type} alert-data-bs-dismissible fade show mt-3 shadown-sm">
-                    ${escapeHTML(message)}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>`
-                select("#alert-container")?.insertAdjacentHTML("beforeend", markup);
-                setTimeout(() => document.getElementById(alertId)?.remove(), 3500);
-            }
-
-            const escapeHTML = text => String(text ?? "").replace(/[&<>"'`=\/]/g, ch => ({
-                "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;"
-            }[ch] || ch));
-
-
-            //Seção responsável pela ativação da modal de remoção de registros
-            const confirmDeleteModal = select(".confirm-delete-modal");
-
-            const getConfirmDeleteModal = () =>
-                bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
-
-            let selectedEntityId = null
-
-            const initDeleteModule = () => {
-
-                delegateEvent(document, "click", ".btn-entity-delete", (_evt, button) => {
-                    selectedEntityId = button.dataset.id ?? "";
-                    getConfirmDeleteModal().show();
-
-                });
-
-                const confirmDeleteButton = select(".confirm-delete-button")
-
-                onEvent(confirmDeleteButton, "click", async () => {
-                    const id = selectedEntityId?.trim();
-
-                    if (!id) return;
-
-                    try {
-                        const deleteUrl = page_data.endpoint_delete.replace("{id}", encodeURIComponent(id));
-                        const { ok } = await httpRequest(deleteUrl, { method: "POST" });
-
-                        if (ok) {
-                            document.querySelector(`tr[data-id="${CSS.escape(id)}"]`)?.remove();
-                            showAlertMessage("Registro removido com sucesso!", "success");
-                        }
-                        else {
-                            showAlertMessage("Erro ao remover registro.", "danger");
-                        }
-                    } catch (error) {
-                        showAlertMessage("Falha de comunicação com o servidor", "danger");
-                    }
-                    finally {
-                        getConfirmDeleteModal().hide();
-                        selectedEntityId = null;
-                    }
-                });
-            };
-
             document.addEventListener("DOMContentLoaded", initDeleteModule);
-
             //bootstrap.Modal.getOrCreateInstance(select("#newEntityModal")).show();
         </script>
     </main>
+    <script src="{% static 'js/helpers.js' %}"></script>
+    <script src="{% static 'js/delete_modal.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
