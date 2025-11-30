@@ -16,54 +16,11 @@
     {% include "menu.html" %}
 
     <main class="container my-4">
-        {% include "title.html" with title=data.title%}
-        {% include "search.html" with new_button_label=data.new_button_label%}
-        {% include "table.html" with entities=data.entities%}        
-
-        <!-- Seção que mostra a barra de paginação -->
-        {% if page_obj %}
-        <div class="card-body">
-            <nav>
-                <ul class="pagination mb-0">
-                    {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-                            <<
-                        </a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">
-                            << 
-                        </span>
-                    </li>
-                    {% endif %}
-
-                    {% for num in page_obj.paginator.page_range %}
-                    {% if num == page_obj.number %}
-                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                    {% else %}
-                    <li class="page-item"><a class="page-link"
-                            href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}">{{
-                            num
-                            }}</a></li>
-                    {% endif %}
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ page_obj.next_page_number }}{% if request.GET.q %} &q={{ request.GET.q }}{% endif %}">>></a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">>></span>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
+        {% include "title.html" with title=data.title %}
+        {% include "search.html" with new_button_label=data.new_button_label %}
+        {% include "table.html" with entities=data.entities %}
+        {% include "pagination.html" with pagination=data.pagination %}
+        
 
         <!-- Modal para criação de registros (só a parte visível, sem comportamento ) -->
         <div class="modal fade" id="newEntityModal" tabindex="-1">
