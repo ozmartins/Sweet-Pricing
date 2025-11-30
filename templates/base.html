@@ -12,14 +12,11 @@
 </head>
 
 <body>
+    
     {% include "menu.html" %}
+    {% include "title.html" with title=data.title%}
+
     <main class="container my-4">
-        <!-- Título da página -->
-        <div class="card mb-4">
-            <div class="card-body d-flex flex-wrap align-items juntify-center-between gap-2">
-                <h1 class="h5 mb-0">{{ page_data.title }}</h1>
-            </div>
-        </div>
 
         <!-- seção de busca de registros -->
         <div class="d-flex align-items-center gap-2 mb-4">

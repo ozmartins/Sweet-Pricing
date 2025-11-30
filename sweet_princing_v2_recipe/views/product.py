@@ -30,6 +30,12 @@ def product_recover(request):
         products = products.filter(name__icontains=query)
     page = Paginator(products, 10).get_page(request.GET.get("page"))
     return render(request, "product/index.html", {
+        "data": {
+            "pagination": page,
+            "title": "Produtos",
+            "new_button_label": "Novo produto",
+            "endpoint_delete": "delete/{id}"
+        },
         "entities": page.object_list,
         "page_obj": page,
         "page_data": {
