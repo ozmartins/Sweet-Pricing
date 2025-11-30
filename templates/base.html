@@ -14,58 +14,11 @@
 <body>
     
     {% include "menu.html" %}
-    {% include "title.html" with title=data.title%}
 
     <main class="container my-4">
-
-        <!-- seção de busca de registros -->
-        <div class="d-flex align-items-center gap-2 mb-4">
-            <form class="d-flex" method="get" action="">
-                <input type="search" name="q" value="{{ request.GET.q|default:'' }}" class="form-control"
-                    placeholder="Buscar por nome">
-                <button class="btn btn-outline-secondary ms-2" type="submit">Buscar</button>
-            </form>
-            <button class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#newProductModal">{{page_data.new_button_label }}</button>
-        </div>
-
-        <!-- Seção que contém a tabela com os registros da página -->
-        <div class="card">
-            <div class="table-responsive">
-                <table id="entities-table" class="table align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if entities %}
-                        {% for entity in entities %}
-                        <tr data-id="{{entity.id}}">
-                            <td class="text-muted">{{entity.id}}</td>
-                            <td>{{entity.name}}</td>
-                            <td>
-                                {% block extra_actions %} {% endblock %}
-                                <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
-                                    data-id="{{entity.id}}" data-name="{{entity.name}}">Alterar</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
-                                    data-id="{{entity.id}}" data-name="{{entity.name}}">Remover</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% else %}
-                        <tr>
-                            <td colspan="3" class="text-center text-muted py-4">
-                                Nenhum produto encontrado.
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        {% include "title.html" with title=data.title%}
+        {% include "search.html" with new_button_label=data.new_button_label%}
+        {% include "table.html" with entities=data.entities%}        
 
         <!-- Seção que mostra a barra de paginação -->
         {% if page_obj %}

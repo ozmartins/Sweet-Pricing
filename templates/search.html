@@ -1,0 +1,11 @@
+<div class="d-flex align-items-center gap-2 mb-4">
+    <form class="d-flex" method="get" action="">
+        <input type="search" name="q" value="{{ request.GET.q|default:'' }}" class="form-control" placeholder="Buscar por nome">
+        <button class="btn btn-outline-secondary ms-2" type="submit">
+            Buscar
+        </button>
+    </form>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProductModal">
+        {{ new_button_label }}
+    </button>
+</div>

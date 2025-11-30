@@ -31,6 +31,7 @@ def product_recover(request):
     page = Paginator(products, 10).get_page(request.GET.get("page"))
     return render(request, "product/index.html", {
         "data": {
+            "entities": page.object_list,
             "pagination": page,
             "title": "Produtos",
             "new_button_label": "Novo produto",

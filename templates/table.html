@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="table-responsive">
+        <table id="entities-table" class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if entities %}
+                {% for entity in entities %}
+                <tr data-id="{{entity.id}}">
+                    <td class="text-muted">{{entity.id}}</td>
+                    <td>{{entity.name}}</td>
+                    <td>
+                        {% block extra_actions %} {% endblock %}
+                        <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
+                            data-id="{{entity.id}}" data-name="{{entity.name}}">Alterar</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
+                            data-id="{{entity.id}}" data-name="{{entity.name}}">Remover</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">
+                        Nenhum produto encontrado.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
