@@ -11,13 +11,13 @@ const ensureEmptyRowIfNeeded = () => {
             }
         };
 
-const getConfirmDeleteModal = () =>
+const getConfirmDeleteModal = () => 
     bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
-
+    
 let selectedEntityId = null
 
 const initDeleteModule = () => {
-
+    
     delegateEvent(document, "click", ".btn-entity-delete", (_evt, button) => {
         selectedEntityId = button.dataset.id ?? "";
         getConfirmDeleteModal().show();
@@ -31,7 +31,7 @@ const initDeleteModule = () => {
 
         if (!id) return;
 
-        try {
+        try {            
             const deleteUrl = page_data.endpoint_delete.replace("{id}", encodeURIComponent(id));
             const { ok } = await httpRequest(deleteUrl, { method: "POST" });
 
@@ -44,7 +44,7 @@ const initDeleteModule = () => {
                 showAlertMessage("Erro ao remover registro.", "danger");
             }
         } catch (error) {
-            showAlertMessage("Falha de comunicação com o servidor", "danger");
+            showAlertMessage("Falha de comunicação com o servidor: "+ error, "danger");
         }
         finally {
             getConfirmDeleteModal().hide();
@@ -53,8 +53,4 @@ const initDeleteModule = () => {
     });
 };
 
-const initFocusOnDeleteModal = () => {
-    focusPrimaryButtonOnModalShow(deleteConfirmModalElement);
-};
 document.addEventListener("DOMContentLoaded", initDeleteModule);
-document.addEventListener("DOMContentLoaded", initFocusOnDeleteModal);

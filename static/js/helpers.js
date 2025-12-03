@@ -2,7 +2,7 @@ const select = (selector, root = document) => root.querySelector(selector);
 const selectAll = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const onEvent = (element, eventName, handler, options) => element && element.addEventListener(eventName, handler, options)
 
-const delegateEvent = (root, eventName, selector, handler) =>
+const delegateEvent = (root, eventName, selector, handler) => 
     onEvent(root, eventName, evt => {
         const target = evt.target.closest(selector);
         if (target && root.contains(target)) {
@@ -50,6 +50,3 @@ const showAlertMessage = (message, type = "success") => {
 const escapeHTML = text => String(text ?? "").replace(/[&<>"'`=\/]/g, ch => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;"
 }[ch] || ch));
-
-const focusPrimaryButtonOnModalShow = modalEl =>
-    onEvent(modalEl, "shown.bs.modal", () => modalEl.querySelector(".modal-footer .btn.btn-primary")?.focus());

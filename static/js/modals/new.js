@@ -87,9 +87,9 @@ const initNewEntityModule = () => {
     });
 };
 
-const initFocusOnDeleteModal = () => {
+const initFocusOnNewModal = () => {
     focusPrimaryButtonOnModalShow(newEntityModal)
 };
 
 document.addEventListener("DOMContentLoaded", initNewEntityModule);
-document.addEventListener("DOMContentLoaded", initFocusOnDeleteModal);
+document.addEventListener("DOMContentLoaded", initFocusOnNewModal);
