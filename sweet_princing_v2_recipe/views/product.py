@@ -11,12 +11,12 @@ def product_create(request):
     form = ProductForm(request.POST)
     if not form.is_valid():
         return JsonResponse({
-            "OK": False,
+            "ok": False,
             "errors": form.errors
         })
     product = form.save()
     return JsonResponse({
-            "OK": True,
+            "ok": True,
             "id": product.pk,
             "name": product.name
         })
@@ -35,7 +35,8 @@ def product_recover(request):
             "pagination": page,
             "title": "Produtos",
             "new_button_label": "Novo produto",
-            "endpoint_delete": "delete/{id}"
+            "endpoint_delete": "delete/{id}",
+            "endpoint_create": "create"
         }
     })
 

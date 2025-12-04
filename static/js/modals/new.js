@@ -1,10 +1,10 @@
+const newDataElement = document.getElementById("js-data");
+
 const entitiesTbody = select("#entities-table tbody");
 
 const newEntityModal = select("#newEntityModal");
 
 const getNewEntityModal = () => bootstrap.Modal.getOrCreateInstance(newEntityModal);
-
-const removeEmptyPlaceholderRow = () => entitiesTbody?.querySelector(".empty-row")?.remove();
 
 const insertEntityRow = (id, name) => {
     const safeId = escapeHTML(String(id));
@@ -57,7 +57,7 @@ const initNewEntityModule = () => {
         saveNewEntityButton.disabled = true;
         try {
             const formData = new FormData(newEntityForm);
-            const createUrl = page_data.endpoint_create.replace("{id}", encodeURIComponent(id));
+            const createUrl = newDataElement.dataset.endpointCreate;
             const { ok, data } = await httpRequest(createUrl, {
                 method: "POST",
                 body: formData
@@ -69,14 +69,13 @@ const initNewEntityModule = () => {
                     newEntityNameError.textContent = data.errors.name.join(" ");
                 } else {
                     newEntityGeneralError.classList.remove("d-none");
-                    newEntityGeneralError.textContent = "Não foi possivel salvar o registro. Tente novament77e.";
+                    newEntityGeneralError.textContent = "Não foi possivel salvar o registro. Tente novamente.";
                 }
                 return;
             }
 
             getNewEntityModal().hide();
             showAlertMessage("Registro salvo com sucesso");
-            removeEmptyPlaceholderRow();
             insertEntityRow(data.id, data.name);
         } catch {
             newEntityGeneralError.classList.remove("d-none");
@@ -87,9 +86,4 @@ const initNewEntityModule = () => {
     });
 };
 
-const initFocusOnNewModal = () => {
-    focusPrimaryButtonOnModalShow(newEntityModal)
-};
-
 document.addEventListener("DOMContentLoaded", initNewEntityModule);
-document.addEventListener("DOMContentLoaded", initFocusOnNewModal);

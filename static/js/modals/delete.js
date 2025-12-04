@@ -1,6 +1,6 @@
-const dataElement = document.getElementById("js-data");
+const deleteDataElement = document.getElementById("js-data");
   
-const endpointTemplate = dataElement.dataset.endpointDelete;
+const endpointTemplate = deleteDataElement.dataset.endpointDelete;
 
 const confirmDeleteModal = select(".confirm-delete-modal");
 
