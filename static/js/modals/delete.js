@@ -1,23 +1,15 @@
-const page_data = JSON.parse(document.getElementById("page-data").textContent);
+const dataElement = document.getElementById("js-data");
+  
+const endpointTemplate = dataElement.dataset.endpointDelete;
 
 const confirmDeleteModal = select(".confirm-delete-modal");
-
-const ensureEmptyRowIfNeeded = () => {
-            if (!entitiesTbody?.querySelector("tr")) {
-                entitiesTbody.insertAdjacentHTML("beforeend", `
-                    <tr class="empty-row">
-                        <td colspan="3" class="text-center text-muted py-4">Nenhum registro encontrado.</td>
-                    </tr>`);
-            }
-        };
 
 const getConfirmDeleteModal = () => 
     bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
     
 let selectedEntityId = null
 
-const initDeleteModule = () => {
-    
+const initDeleteModule = () => {    
     delegateEvent(document, "click", ".btn-entity-delete", (_evt, button) => {
         selectedEntityId = button.dataset.id ?? "";
         getConfirmDeleteModal().show();
@@ -31,13 +23,13 @@ const initDeleteModule = () => {
 
         if (!id) return;
 
-        try {            
-            const deleteUrl = page_data.endpoint_delete.replace("{id}", encodeURIComponent(id));
+        try {                 
+            const deleteUrl = endpointTemplate.replace("{id}", encodeURIComponent(id));
+            
             const { ok } = await httpRequest(deleteUrl, { method: "POST" });
-
+            
             if (ok) {
                 document.querySelector(`tr[data-id="${CSS.escape(id)}"]`)?.remove();
-                ensureEmptyRowIfNeeded();
                 showAlertMessage("Registro removido com sucesso!", "success");
             }
             else {
