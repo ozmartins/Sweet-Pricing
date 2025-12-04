@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
 from ..models import Product
@@ -35,10 +35,21 @@ def product_recover(request):
             "pagination": page,
             "title": "Produtos",
             "new_button_label": "Novo produto",
-            "endpoint_delete": "delete/{id}",
-            "endpoint_create": "create"
+            "endpoint_create": "create",
+            "endpoint_update": "update/{id}",
+            "endpoint_delete": "delete/{id}"
         }
     })
+
+
+@require_POST
+def product_update(request, pk: int):
+    product = get_object_or_404(Product, pk=pk)
+    form = ProductForm(request.POST, instance=product)
+    if not form.is_valid():
+        return JsonResponse({"ok": False, "errors": form.errors}, status=400)
+    product = form.save()
+    return JsonResponse({"ok": True, "id": product.pk, "name": product.name})
 
 
 @require_POST

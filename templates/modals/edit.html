@@ -1,0 +1,24 @@
+<div class="modal fade" id="editEntityModal" tabindex="-1" aria-labelledby="edtEntityLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="editEntityForm" class="modal-content">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="edt-id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edtEntityLabel">Editar registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="edt-name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="edt-name" name="name" maxlength="100" required>
+                    <div class="invalid-feedback" id="edt-error-name"></div>
+                </div>
+                <div class="alert alert-danger d-none" id="edt-error-general"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Descartar e fechar</button>
+                <button type="submit" class="btn btn-primary" id="btnEditSave">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>

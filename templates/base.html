@@ -21,21 +21,24 @@
         {% include "search.html" with new_button_label=data.new_button_label %}
         {% include "table.html" with entities=data.entities %}
         {% include "pagination.html" with pagination=data.pagination %}
-        {% include "modals/delete.html" with pagination=data.pagination %}
-        {% include "modals/new.html" with pagination=data.pagination %}
+        {% include "modals/delete.html"%}
+        {% include "modals/new.html"%}
+        {% include "modals/edit.html"%}
 
         <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;"></div>
 
         <div 
             id="js-data" 
             data-endpoint-delete="{{ data.endpoint_delete }}"
-            data-endpoint-create="{{ data.endpoint_create }}">
+            data-endpoint-create="{{ data.endpoint_create }}"
+            data-endpoint-update="{{ data.endpoint_update }}">
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/helpers.js' %}"></script>
     <script src="{% static 'js/modals/delete.js' %}"></script>
     <script src="{% static 'js/modals/new.js' %}"></script>
+    <script src="{% static 'js/modals/edit.js' %}"></script>
 </body>
 
 </html>

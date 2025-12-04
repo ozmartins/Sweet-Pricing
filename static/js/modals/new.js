@@ -14,10 +14,10 @@ const insertEntityRow = (id, name) => {
                 <td class="text-muted">#${safeId}</td>
                 <td>${safeName}</td>
                 <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-primary btn-entity-edit"
-                            data-id="${safeId}" data-name="${safeName}">Edit</button>
+                    <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
+                            data-id="${safeId}" data-name="${safeName}">Alterar</button>
                     <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
-                            data-id="${safeId}" data-name="${safeName}">Delete</button>
+                            data-id="${safeId}" data-name="${safeName}">Remover</button>
                 </td>
                 </tr>`;
     entitiesTbody.insertAdjacentHTML("afterbegin", rowHtml);
@@ -79,7 +79,7 @@ const initNewEntityModule = () => {
             insertEntityRow(data.id, data.name);
         } catch {
             newEntityGeneralError.classList.remove("d-none");
-            newEntityGeneralError.textContent = "Network error. Please try again later.";
+            newEntityGeneralError.textContent = "Erro de rede. Por favor, tente novamente.";
         } finally {
             saveNewEntityButton.disabled = false;
         }
