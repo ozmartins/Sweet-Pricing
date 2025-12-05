@@ -29,7 +29,7 @@ const initDeleteModule = () => {
             const { ok } = await httpRequest(deleteUrl, { method: "POST" });
             
             if (ok) {
-                document.querySelector(`tr[data-id="${CSS.escape(id)}"]`)?.remove();
+                window.location.reload();
                 showAlertMessage("Registro removido com sucesso!", "success");
             }
             else {

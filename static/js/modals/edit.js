@@ -6,14 +6,6 @@ const editEntityModalElement = select("#editEntityModal");
 
 const getEditEntityModal = () => bootstrap.Modal.getOrCreateInstance(editEntityModalElement);
 
-const updateEntityRowName = (id, newName) => {
-    const row = document.querySelector(`tr[data-id="${CSS.escape(String(id))}"]`);
-    if (!row) return;
-    row.querySelector("td:nth-child(2)")?.replaceChildren(document.createTextNode(newName));
-    row.querySelector(".btn-entity-edit")?.setAttribute("data-name", newName);
-    row.querySelector(".btn-entity-delete")?.setAttribute("data-name", newName);
-};
-
 const initEditEntityModule = () => {
     const editEntityForm = select("#editEntityForm");
     const saveEditedEntityButton = select("#btnEditSave");
@@ -66,7 +58,7 @@ const initEditEntityModule = () => {
 
             getEditEntityModal().hide();
             showAlertMessage("Registro salvo com sucesso");
-            updateEntityRowName(id, data.name);
+            window.location.reload();
         } catch {
             editEntityGeneralError.classList.remove("d-none");
             editEntityGeneralError.textContent = "Erro de rede. Por favor, tente novamente.";

@@ -6,23 +6,6 @@ const newEntityModal = select("#newEntityModal");
 
 const getNewEntityModal = () => bootstrap.Modal.getOrCreateInstance(newEntityModal);
 
-const insertEntityRow = (id, name) => {
-    const safeId = escapeHTML(String(id));
-    const safeName = escapeHTML(String(name));
-    const rowHtml = `
-                <tr data-id="${safeId}">
-                <td class="text-muted">#${safeId}</td>
-                <td>${safeName}</td>
-                <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
-                            data-id="${safeId}" data-name="${safeName}">Alterar</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
-                            data-id="${safeId}" data-name="${safeName}">Remover</button>
-                </td>
-                </tr>`;
-    entitiesTbody.insertAdjacentHTML("afterbegin", rowHtml);
-};
-
 const initNewEntityModule = () => {
     const newEntityForm = select("#newEntityForm");
     const saveNewEntityButton = select("#btnSaveNew");
@@ -76,7 +59,7 @@ const initNewEntityModule = () => {
 
             getNewEntityModal().hide();
             showAlertMessage("Registro salvo com sucesso");
-            insertEntityRow(data.id, data.name);
+            window.location.reload();
         } catch {
             newEntityGeneralError.classList.remove("d-none");
             newEntityGeneralError.textContent = "Erro de rede. Por favor, tente novamente.";
