@@ -1,7 +1,3 @@
-const deleteDataElement = document.getElementById("js-data");
-  
-const endpointTemplate = deleteDataElement.dataset.endpointDelete;
-
 const confirmDeleteModal = select(".confirm-delete-modal");
 
 const getConfirmDeleteModal = () => 
@@ -24,7 +20,7 @@ const initDeleteModule = () => {
         if (!id) return;
 
         try {                 
-            const deleteUrl = endpointTemplate.replace("{id}", encodeURIComponent(id));
+            const deleteUrl = "delete/"+encodeURIComponent(id);
             
             const { ok } = await httpRequest(deleteUrl, { method: "POST" });
             
@@ -46,3 +42,10 @@ const initDeleteModule = () => {
 };
 
 document.addEventListener("DOMContentLoaded", initDeleteModule);
+
+const modalEl = document.getElementById('confirmDeleteModal');
+
+modalEl.addEventListener('shown.bs.modal', function () {
+    const deleteBtn = modalEl.querySelector('.confirm-delete-button');
+    deleteBtn.focus();
+});

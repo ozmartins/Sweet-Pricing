@@ -15,6 +15,8 @@ def product_create(request):
             "errors": form.errors
         })
     product = form.save()
+    product.price = 0
+    product.save()
     return JsonResponse({
             "ok": True,
             "id": product.pk,
@@ -34,10 +36,7 @@ def product_recover(request):
             "entities": page.object_list,
             "pagination": page,
             "title": "Produtos",
-            "new_button_label": "Novo produto",
-            "endpoint_create": "create",
-            "endpoint_update": "update/{id}",
-            "endpoint_delete": "delete/{id}"
+            "new_button_label": "Novo produto"
         }
     })
 

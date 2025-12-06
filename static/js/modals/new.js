@@ -40,8 +40,7 @@ const initNewEntityModule = () => {
         saveNewEntityButton.disabled = true;
         try {
             const formData = new FormData(newEntityForm);
-            const createUrl = newDataElement.dataset.endpointCreate;
-            const { ok, data } = await httpRequest(createUrl, {
+            const { ok, data } = await httpRequest("create", {
                 method: "POST",
                 body: formData
             });

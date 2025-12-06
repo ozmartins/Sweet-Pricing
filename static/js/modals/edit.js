@@ -1,7 +1,3 @@
-const editDataElement = document.getElementById("js-data");
-
-const editEndpointTemplate = editDataElement.dataset.endpointUpdate;
-
 const editEntityModalElement = select("#editEntityModal");
 
 const getEditEntityModal = () => bootstrap.Modal.getOrCreateInstance(editEntityModalElement);
@@ -42,7 +38,7 @@ const initEditEntityModule = () => {
         saveEditedEntityButton.disabled = true;
         try {
             const formData = new FormData(editEntityForm);            
-            const updateUrl = editEndpointTemplate.replace("{id}", encodeURIComponent(id));
+            const updateUrl = "update/"+encodeURIComponent(id);
             const { ok, data } = await httpRequest(updateUrl, { method: "POST", body: formData });
 
             if (!ok || !data?.ok) {
