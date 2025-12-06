@@ -6,3 +6,17 @@ class Product(models.Model):
 
 class Supplier(models.Model):
     name = models.CharField(max_length=100)
+
+class Recipe(models.Model):
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.RESTRICT,
+        related_name='recipes'
+    )
+
+    yields = models.DecimalField(
+        max_digits=5,
+        decimal_places=2
+    )
+
+    preparationTimeInMinutes = models.IntegerField()

@@ -41,6 +41,19 @@ def product_recover(request):
     })
 
 
+@require_GET
+def product_search(request):
+    query = request.GET.get("q", "")
+    products = Product.objects.all().order_by("name")
+    if (query):
+        products = products.filter(name__icontains=query)
+    products_data = list(products.values("id", "name"))
+    return JsonResponse({
+        "ok": True,
+        "products": products_data
+    })
+
+
 @require_POST
 def product_update(request, pk: int):
     product = get_object_or_404(Product, pk=pk)

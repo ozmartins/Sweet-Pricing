@@ -37,7 +37,7 @@ const initEditEntityModule = () => {
 
         saveEditedEntityButton.disabled = true;
         try {
-            const formData = new FormData(editEntityForm);            
+            const formData = new FormData(editEntityForm);
             const updateUrl = "update/"+encodeURIComponent(id);
             const { ok, data } = await httpRequest(updateUrl, { method: "POST", body: formData });
 

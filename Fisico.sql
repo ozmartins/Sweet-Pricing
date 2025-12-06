@@ -1,5 +1,3 @@
-/* Lógico: */
-
 CREATE TABLE Usuario (
     Codigo long PRIMARY KEY,
     Nome varchar(100),

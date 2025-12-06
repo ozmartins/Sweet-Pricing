@@ -1,0 +1,44 @@
+<div class="modal fade" id="newEntityModal" tabindex="-1" aria-labelledby="newEntityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="newEntityForm" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newEntityModalLabel">Novo registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                
+                <div class="mb-3">
+                    <label for="entity-product" class="form-label">Produto</label>
+                    <select class="form-select" id="new-entity-product" name="product" required>
+                    </select>
+                    <div class="invalid-feedback" id="new-entity-product-error"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="entity-yields" class="form-label">Rendimento (porções)</label>
+                    <input type="number" class="form-control" id="new-entity-yields" name="yields" min="0" step="0.01">
+                    <div class="invalid-feedback" id="new-entity-yields-error"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="entity-preptime" class="form-label">Tempo de Preparo (minutos)</label>
+                    <input type="number" class="form-control" id="new-entity-preptime" name="preparationTimeInMinutes" min="0" step="1">
+                    <div class="invalid-feedback" id="new-entity-preptime-error"></div>
+                </div>
+
+                <div class="alert alert-danger d-none" id="new-entity-general-error"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Descartar e fechar
+                </button>
+                <button type="submit" class="btn btn-primary" id="newBtnSaveEntity">
+                    Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,15 +1,39 @@
 {% extends "base.html" %}
 
-{% block extra_columns_title %}
+{% load static %}
+
+{% block columns_title %}
+<th>#</th>
+<th>Nome</th>
 <th>Preço</th>
 {% endblock %}
 
-{% block extra_columns_value %}
+{% block columns_value %}
+<td class="text-muted">{{entity.id}}</td>
+<td>{{entity.name}}</td>
 <td>{{entity.price}}</td>
 {% endblock %}
 
-{% block extra_actions %}
-<a href="#" class="btn btn-sm btn-info text-light" data-id="{{entity.id}}">
+{% block actions %}
+<button type="button" class="btn btn-sm btn-outline-info btn-entity-edit" data-id="{{entity.id}}" data-name="{{entity.name}}">
+    Alterar
+</button>
+<button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete" data-id="{{entity.id}}">
+    Remover
+</button>
+<a href="{% url 'sweet_pricing_v2_recipe:recipe_recover' %}" class="btn btn-sm btn-info text-light" data-id="{{entity.id}}">
     Receita
 </a>
+{% endblock %}
+
+{% block modals %}
+{% include "modals/delete.html"%}
+{% include "modals/new.html"%}
+{% include "modals/edit.html"%}
+{% endblock %}
+
+{% block modal_scritps %}
+<script src="{% static 'js/modals/delete.js' %}"></script>
+<script src="{% static 'js/modals/new.js' %}"></script>
+<script src="{% static 'js/modals/edit.js' %}"></script>
 {% endblock %}
