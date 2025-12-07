@@ -22,17 +22,13 @@ def recipe_create(request):
 
 
 @require_GET
-def recipe_recover(request, pk:int):
-    recipes = Recipe.objects.all().order_by("product__name")
-    recipe = recipes.filter(product__id=pk).first()    
-    product = Product.objects.all().filter(id=pk).first()
-    page = Paginator(recipes, 10).get_page(request.GET.get("page"))    
+def recipe_recover(request, pk:int):    
+    recipe = Recipe.objects.all().order_by("product__name").filter(product__id=pk).first()
+    product = Product.objects.all().filter(id=pk).first()    
     return render(request, "recipe/index.html", {
         "data": {
             "product": product,
-            "recipe": recipe,
-            "entities": page.object_list,
-            "pagination": page,            
+            "recipe": recipe            
         }
     })
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Supplier, Recipe, Ingredient, Purchase
+from .models import Product, Supplier, Recipe, RecipeItem, Ingredient, Purchase
 
 class ProductForm(forms.ModelForm):
     class Meta: 
@@ -12,6 +12,7 @@ class ProductForm(forms.ModelForm):
             'name': 'Nome'
         }
 
+
 class IngredientForm(forms.ModelForm):
     class Meta: 
         model = Ingredient
@@ -22,6 +23,7 @@ class IngredientForm(forms.ModelForm):
         labels = {
             'name': 'Nome'
         }
+        
 
 class SupplierForm(forms.ModelForm):
     class Meta: 
@@ -33,6 +35,7 @@ class SupplierForm(forms.ModelForm):
         labels = {
             'name': 'Nome'
         }
+
 
 class RecipeForm(forms.ModelForm):
     class Meta:
@@ -55,6 +58,33 @@ class RecipeForm(forms.ModelForm):
             'yields': 'Rendimento (porções)',
             'preparationTimeInMinutes': 'Tempo de preparo (em minutos)'
         }
+
+
+class RecipeItemForm(forms.ModelForm):        
+    class Meta:    
+        model = RecipeItem
+        fields = ['ingredient', 'quantity', 'unitOfMeasure']
+        widgets = {            
+            'recipe': forms.HiddenInput(),
+            'ingredient': forms.Select(attrs={
+                'class': 'form-select'                
+            }),
+            'quantity': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0'
+            }),
+            'unitOfMeasure': forms.Select(attrs={
+                'class': 'form-select'
+            })
+        }
+        labels = {            
+            'recipe': 'Receita',
+            'ingredient': 'Ingrediente',
+            'quantity': 'Quantidade',
+            'unitOfMeasure': 'Unidade de medida'
+        }
+
 
 class PurchaseForm(forms.ModelForm):
     class Meta:

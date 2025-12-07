@@ -1,31 +1,21 @@
-CREATE TABLE Usuario (
+CREATE TABLE Usuario
+(
     Codigo long PRIMARY KEY,
     Nome varchar(100),
     Email varchar(255),
     EmailConfirmado boolean
 );
 
-CREATE TABLE Receita (
-    Codigo bigint PRIMARY KEY,
-    Nome varchar(100),
-    Rendimento int,
-    TempoPreparoEmMinutos int
-);
-
-CREATE TABLE Insumo (
-    Codigo bigint PRIMARY KEY,
-    Nome varchar(100),
-    UltimoCusto numeric(10,2)
-);
-
-CREATE TABLE Compra (
+CREATE TABLE Compra
+(
     Codigo bigint PRIMARY KEY,
     DataHora timestamp,
     Total numeric(10,2),
     IdFornecedor bigint
 );
 
-CREATE TABLE CompraItem (
+CREATE TABLE CompraItem
+(
     Codigo bigint PRIMARY KEY,
     Quantidade numeric(10,2),
     UnidadeMedidaSistemaMetrico smallint,
@@ -34,23 +24,8 @@ CREATE TABLE CompraItem (
     IdCompra bigint
 );
 
-CREATE TABLE Ingrediente (
-    Codigo bigint PRIMARY KEY,
-    Quantidade numeric(10,2),
-    UnidadeMedidaCulinaria smallint,
-    UnidadeMedidaSistemaMetrico smallint,
-    IdReceita bigint,
-    IdInsumo bigint
-);
-
-CREATE TABLE Produto (
-    Codigo bigint PRIMARY KEY,
-    Nome varchar(100),
-    Preco 8,2,
-    IdReceita bigint
-);
-
-CREATE TABLE FichaCustoOutrosCustos (
+CREATE TABLE FichaCustoOutrosCustos
+(
     Codigo bigint PRIMARY KEY,
     Quantidade numeric(10,2),
     UnidadeMedidaSistemaMetrico smallint,
@@ -59,19 +34,16 @@ CREATE TABLE FichaCustoOutrosCustos (
     IdFichaCusto bigint
 );
 
-CREATE TABLE Fornecedor (
-    Codigo bigint PRIMARY KEY,
-    Nome varchar(100)
-);
-
-CREATE TABLE FichaCusto (
+CREATE TABLE FichaCusto
+(
     Codigo bigint PRIMARY KEY,
     DataHoraCalculo timestamp,
     CustoTotal numeric(10,2),
     IdProduto bigint
 );
 
-CREATE TABLE FichaCustoInsumo (
+CREATE TABLE FichaCustoInsumo
+(
     Codigo bigint PRIMARY KEY,
     Quantidade numeric(10,2),
     CustoTotal numeric(10,2),
@@ -79,7 +51,8 @@ CREATE TABLE FichaCustoInsumo (
     IdInsumo bigint
 );
 
-CREATE TABLE FichaKardex (
+CREATE TABLE FichaKardex
+(
     Codigo bigint PRIMARY KEY,
     Data timestamp,
     TipoMovimento smallint,
@@ -89,71 +62,72 @@ CREATE TABLE FichaKardex (
     IdInsumo bigint
 );
 
-CREATE TABLE FichaCustoOutrosCustos_Insumo (
+CREATE TABLE FichaCustoOutrosCustos_Insumo
+(
     IdFichaCustoOutrosCustos bigint,
     IdInsumo bigint
 );
- 
+
 ALTER TABLE Compra ADD CONSTRAINT FK_Compra_2
     FOREIGN KEY (IdFornecedor)
     REFERENCES Fornecedor (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE CompraItem ADD CONSTRAINT FK_CompraItem_2
     FOREIGN KEY (IdInsumo)
     REFERENCES Insumo (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE CompraItem ADD CONSTRAINT FK_CompraItem_3
     FOREIGN KEY (IdCompra)
     REFERENCES Compra (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE Ingrediente ADD CONSTRAINT FK_Ingrediente_2
     FOREIGN KEY (IdReceita)
     REFERENCES Receita (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE Ingrediente ADD CONSTRAINT FK_Ingrediente_3
     FOREIGN KEY (IdInsumo)
     REFERENCES Insumo (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE Produto ADD CONSTRAINT FK_Produto_2
     FOREIGN KEY (IdReceita)
     REFERENCES Receita (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaCustoOutrosCustos ADD CONSTRAINT FK_FichaCustoOutrosCustos_2
     FOREIGN KEY (IdFichaCusto)
     REFERENCES FichaCusto (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaCusto ADD CONSTRAINT FK_FichaCusto_2
     FOREIGN KEY (IdProduto)
     REFERENCES Produto (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaCustoInsumo ADD CONSTRAINT FK_FichaCustoInsumo_2
     FOREIGN KEY (IdFichaCusto)
     REFERENCES FichaCusto (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaCustoInsumo ADD CONSTRAINT FK_FichaCustoInsumo_3
     FOREIGN KEY (IdInsumo)
     REFERENCES Insumo (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaKardex ADD CONSTRAINT FK_FichaKardex_2
     FOREIGN KEY (IdInsumo)
     REFERENCES Insumo (Codigo)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE FichaCustoOutrosCustos_Insumo ADD CONSTRAINT FK_FichaCustoOutrosCustos_Insumo_1
     FOREIGN KEY (IdFichaCustoOutrosCustos)
     REFERENCES FichaCustoOutrosCustos (Codigo)
     ON DELETE SET NULL;
- 
+
 ALTER TABLE FichaCustoOutrosCustos_Insumo ADD CONSTRAINT FK_FichaCustoOutrosCustos_Insumo_2
     FOREIGN KEY (IdInsumo)
     REFERENCES Insumo (Codigo)
