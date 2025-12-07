@@ -1,3 +1,41 @@
+# 🍰 Sweet Pricing
+
+Sweet Pricing é uma aplicação voltada para o gerenciamento e precificação de receitas culinárias.  
+Seu objetivo é facilitar o controle de custos de ingredientes e automatizar o cálculo de preços de produtos feitos por confeiteiros e pequenos produtores.
+
+---
+
+## ✨ Funcionalidades
+
+- Cadastro de produtos (receitas)
+- Cadastro de ingredientes
+- Inclusão de ingredientes na receita com:
+  - Quantidade
+  - Unidade de medida (kg, g, L, mL, unidade...)
+- Listagem e edição de itens da receita
+- Cálculo automatizado do custo do produto (em desenvolvimento)
+- Interface simples e responsiva (Bootstrap)
+- Backend com Django
+
+---
+
+## 🧱 Estrutura do Projeto (resumo)
+
+Sweet-Pricing/
+│
+├── <app>/ # App principal (models, views, templates, static...)
+│ ├── models.py
+│ ├── forms.py
+│ ├── views.py
+│ ├── static/
+│ ├── templates/
+│ └── ...
+│
+├── manage.py
+└── README.md
+
+> *A estrutura pode variar conforme evolução do projeto.*
+
 ---
 
 ## 🛠️ Tecnologias utilizadas
@@ -34,3 +72,8 @@ python manage.py migrate
 
 # Executar servidor local
 python manage.py runserver
+
+Agora é só acessar no navegador:
+
+[http://127.0.0.1:8000/](http://127.0.0.1:8000/
+)
