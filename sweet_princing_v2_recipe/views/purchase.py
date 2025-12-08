@@ -24,16 +24,16 @@ def purchase_create(request):
 @require_GET
 def purchase_recover(request):
     query = request.GET.get("q", "")
-    purchases = Purchase.objects.all().order_by("product__name")
+    purchases = Purchase.objects.all().order_by("create_at")
     if (query):
-        purchases = purchases.filter(product__name__icontains=query)
+        purchases = purchases.filter(supplier__name__icontains=query)
     page = Paginator(purchases, 10).get_page(request.GET.get("page"))
     return render(request, "purchase/index.html", {
         "data": {
             "entities": page.object_list,
             "pagination": page,
             "title": "Receitas",
-            "new_button_label": "Nova receita"
+            "new_button_label": "Nova compra"
         }
     })
 

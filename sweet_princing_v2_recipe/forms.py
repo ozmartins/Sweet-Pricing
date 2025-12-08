@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Supplier, Recipe, RecipeItem, Ingredient, Purchase
+from .models import Product, Supplier, Recipe, RecipeItem, Ingredient, Purchase, PurchaseItem
 
 class ProductForm(forms.ModelForm):
     class Meta: 
@@ -97,4 +97,34 @@ class PurchaseForm(forms.ModelForm):
         }
         labels = {
             'supplier': 'Fornecedor'
+        }
+
+class PurchaseItemForm(forms.ModelForm):
+    class Meta:
+        model = PurchaseItem
+        fields = ['purchase', 'ingredient', 'quantity', 'unitOfMeasure', 'total']
+        widgets = {            
+            'puchase': forms.HiddenInput(),
+            'ingredient': forms.Select(attrs={
+                'class': 'form-select'                
+            }),
+            'quantity': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0'
+            }),
+            'unitOfMeasure': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'total': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0'
+            })
+        }
+        labels = {            
+            'ingredient': 'Ingrediente',
+            'quantity': 'Quantidade',
+            'unitOfMeasure': 'Unidade de medida',
+            'total': 'Total'
         }

@@ -62,10 +62,10 @@ class RecipeItem(models.Model):
         on_delete=models.RESTRICT        
     )    
     quantity = models.DecimalField(
-        max_digits=5,
+        max_digits=10,
         decimal_places=2
     )
-    unitOfMeasure = models.SmallIntegerField(        
+    unitOfMeasure = models.SmallIntegerField(
         choices=UNIT_CHOICES,
         default=10
     )
@@ -90,6 +90,48 @@ class Purchase(models.Model):
     )
     create_at = models.DateField(auto_now_add=True, blank=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Compra"
+        verbose_name_plural = "Compras"
+
+
+class PurchaseItem(models.Model):
+    UNIT_CHOICES = [
+        (1, 'Quilograma'),
+        (2, 'Grama'),
+        (3, 'Miligrama'),
+        (4, 'Litro'),
+        (5, 'Mililitro'),
+        (6, 'Colher de chá'),
+        (7, 'Colher de sopa'),
+        (8, 'Colher de sobremesa'),
+        (9, 'Xícara'),
+        (10, 'Unidade'),
+        (11, 'Pitada'),
+        (12, 'Copo americano'),
+        (13, 'Concha')
+    ]
+
+    purchase = models.ForeignKey(
+        Purchase,
+        on_delete=models.CASCADE
+    )    
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.RESTRICT        
+    )    
+    quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+    unitOfMeasure = models.SmallIntegerField(
+        choices=UNIT_CHOICES,
+        default=10
+    )
+    total = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2)
 
     class Meta:
         verbose_name = "Compra"

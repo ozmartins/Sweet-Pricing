@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
-from django.views.decorators.http import require_GET, require_POST
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 from ..models import RecipeItem
 from ..forms import RecipeItemForm
 
@@ -31,7 +31,7 @@ def recipe_item_update(request, pk: int):
 
 
 @require_POST
-def recipe_item_delete(request, pk: int):
+def recipe_item_delete(_, pk: int):
     recipeItem = get_object_or_404(RecipeItem, pk=pk)
     recipeItem.delete()
     return JsonResponse({ "OK": True })

@@ -35,5 +35,15 @@ urlpatterns = [
     
     path('recipe-item/create', views.recipe_item_create, name="recipe_item_create"),
     path('recipe-item/update/<int:pk>', views.recipe_item_update, name="recipe_item_update"),
-    path('recipe-item/delete/<int:pk>', views.recipe_item_delete, name="recipe_item_delete")
+    path('recipe-item/delete/<int:pk>', views.recipe_item_delete, name="recipe_item_delete"),
+
+    path('purchase', views.purchase_recover, name="purchase_recover"),
+    path('purchase/create', views.purchase_create, name="purchase_create"),
+    path('purchase/recover', views.purchase_recover, name="purchase_recover"),
+    path('purchase/update/<int:pk>', views.purchase_update, name="purchase_update"),
+    path('purchase/delete/<int:pk>', views.purchase_delete, name="purchase_delete"),
+    
+    path('purchase-item/create', views.purchase_item_create, name="purchase_item_create"),
+    path('purchase-item/update/<int:pk>', views.purchase_item_update, name="purchase_item_update"),
+    path('purchase-item/delete/<int:pk>', views.purchase_item_delete, name="purchase_item_delete")
 ]
