@@ -57,6 +57,10 @@ class RecipeItem(models.Model):
         Recipe,
         on_delete=models.RESTRICT        
     )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.RESTRICT        
+    )    
     quantity = models.DecimalField(
         max_digits=5,
         decimal_places=2
@@ -65,10 +69,7 @@ class RecipeItem(models.Model):
         choices=UNIT_CHOICES,
         default=10
     )
-    ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.RESTRICT        
-    )    
+    
 
     class Meta:
         verbose_name = "Ingrediente"

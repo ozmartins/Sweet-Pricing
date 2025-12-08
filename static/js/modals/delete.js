@@ -1,11 +1,11 @@
 const confirmDeleteModal = select(".confirm-delete-modal");
 
-const getConfirmDeleteModal = () => 
+const getConfirmDeleteModal = () =>
     bootstrap.Modal.getOrCreateInstance(confirmDeleteModal);
-    
+
 let selectedEntityId = null
 
-const initDeleteModule = () => {    
+const initDeleteModule = () => {
     delegateEvent(document, "click", ".btn-entity-delete", (_evt, button) => {
         selectedEntityId = button.dataset.id ?? "";
         getConfirmDeleteModal().show();
@@ -19,11 +19,11 @@ const initDeleteModule = () => {
 
         if (!id) return;
 
-        try {                 
-            const deleteUrl = "delete/"+encodeURIComponent(id);
-            
+        try {
+            const deleteUrl = "/recipe-item/delete/" + encodeURIComponent(id);
+
             const { ok } = await httpRequest(deleteUrl, { method: "POST" });
-            
+
             if (ok) {
                 window.location.reload();
                 showAlertMessage("Registro removido com sucesso!", "success");
@@ -32,7 +32,7 @@ const initDeleteModule = () => {
                 showAlertMessage("Erro ao remover registro.", "danger");
             }
         } catch (error) {
-            showAlertMessage("Falha de comunicação com o servidor: "+ error, "danger");
+            showAlertMessage("Falha de comunicação com o servidor: " + error, "danger");
         }
         finally {
             getConfirmDeleteModal().hide();

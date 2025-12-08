@@ -94,20 +94,30 @@
                 <table id="entities-table" class="table align-middle mb-0">
                     <thead>
                         <tr>
-                            {% block columns_title %}
-                            {% endblock %}
+                            <th class="text-muted">#</th>
+                            <th>Ingrediente</th>
+                            <th class="text-end">Quantidade</th>
+                            <th>Unidade medida</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% if data.entities %}
-                        {% for entity in data.entities %}
-                        <tr data-id="{{entity.id}}">
-                            {% block columns_value %}
-                            {% endblock %}
+                        {% if data.itens %}
+                        {% for item in data.itens %}
+                        <tr data-id="{{item.id}}">
+                            <td class="text-muted">{{item.id}}</td>
+                            <td>{{item.ingredient.name}}</td>
+                            <td class="text-end">{{item.quantity}}</td>
+                            <td>{{ item.get_unitOfMeasure_display }}</td>
                             <td>
-                                {% block actions %}
-                                {% endblock %}
+                                <button type="button" class="btn btn-sm btn-outline-info btn-entity-edit"
+                                    data-id="{{item.id}}" data-name="{{item.name}}">
+                                    Alterar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
+                                    data-id="{{item.id}}" data-name="{{item.name}}">
+                                    Remover
+                                </button>
                             </td>
                         </tr>
                         {% endfor %}

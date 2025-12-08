@@ -32,11 +32,8 @@ urlpatterns = [
     path('recipe/recover/<int:pk>', views.recipe_recover, name="recipe_recover"),
     path('recipe/update/<int:pk>', views.recipe_update, name="recipe_update"),
     path('recipe/delete/<int:pk>', views.recipe_delete, name="recipe_delete"),
-
-    path('recipe-item/<int:pk>', views.recipe_recover, name="recipe_item_recover"),
-    path('recipe-item/search', views.recipe_search, name="recipe_item_search"),
-    path('recipe-item/create', views.recipe_create, name="recipe_item_create"),
-    path('recipe-item/recover/<int:pk>', views.recipe_recover, name="recipe_item_recover"),
-    path('recipe-item/update/<int:pk>', views.recipe_update, name="recipe_item_update"),
-    path('recipe-item/delete/<int:pk>', views.recipe_delete, name="recipe_item_delete")
+    
+    path('recipe-item/create', views.recipe_item_create, name="recipe_item_create"),
+    path('recipe-item/update/<int:pk>', views.recipe_item_update, name="recipe_item_update"),
+    path('recipe-item/delete/<int:pk>', views.recipe_item_delete, name="recipe_item_delete")
 ]

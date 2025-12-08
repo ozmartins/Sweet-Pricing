@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
-from ..models import RecipeItem, Ingredient
+from ..models import RecipeItem
 from ..forms import RecipeItemForm
 
 
@@ -19,18 +18,6 @@ def recipe_item_create(request):
             "ok": True,
             "id": recipeItem.pk
         })
-
-
-@require_GET
-def recipe_item_recover(request, pk: int):
-    recipes = RecipeItem.objects.all().filter(recipe__id=pk)
-    page = Paginator(recipes, 10).get_page(request.GET.get("page"))    
-    return render(request, "recipe/index.html", {
-        "data": {            
-            "entities": page.object_list,
-            "pagination": page,            
-        }
-    })
 
 
 @require_POST
