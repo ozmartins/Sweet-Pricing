@@ -1,4 +1,4 @@
-var ingredientId = 0;
+var ingredientIdForEditing = 0;
 
 const editRecipeItemModalElement = select("#editRecipeItemModal");
 
@@ -50,14 +50,14 @@ const initEditRecipeItemModule = () => {
             select.appendChild(option);
         });        
 
-        select.value = ingredientId;
+        select.value = ingredientIdForEditing;
     });
 
     delegateEvent(document, "click", ".edit-recipe-item", (_evt, button) => {
-        ingredientId = button.dataset.ingredient ?? "";
+        ingredientIdForEditing = button.dataset.ingredient ?? "";
         clearEditRecipeItemErrors();
         recipeItemIdInput.value = button.dataset.id ?? "";
-        ingredientInput.value = ingredientId;
+        ingredientInput.value = ingredientIdForEditing;
         quantityInput.value = button.dataset.quantity?.replace(".", "").replace(",", ".") ?? "";
         unitInput.value = button.dataset.unit ?? "";
         getEditRecipeItemModal().show();
@@ -75,7 +75,7 @@ const initEditRecipeItemModule = () => {
         if (!quantity) { quantityInput.classList.add("is-invalid"); quantityError.textContent = "Informe a quantidade do ingrediente."; return; }
         if (!unitOfMeasure) { unitInput.classList.add("is-invalid"); unitError.textContent = "Informe a unidade de medida da quantidade."; return; }
 
-        //try {
+        try {
             const formData = new FormData(editRecipeItemForm);
             const updateUrl = "/recipe-item/update/" + encodeURIComponent(recipeItemIdInput.value);
             const { ok, data } = await httpRequest(updateUrl, { method: "POST", body: formData });
@@ -103,10 +103,10 @@ const initEditRecipeItemModule = () => {
             getEditRecipeItemModal().hide();
             showAlertMessage("Registro salvo com sucesso");
             window.location.reload();
-        /*} catch {
+        } catch {
             generalError.classList.remove("d-none");
             generalError.textContent = "Erro de rede. Por favor, tente novamente.";
-        }*/
+        }
     });
 };
 

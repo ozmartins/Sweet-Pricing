@@ -86,7 +86,7 @@
             </div>
 
             <div class="mb-3">
-                <button class="btn btn-primary" id="add-ingredients">
+                <button class="btn btn-primary" id="add-ingredients" data-id="{{data.recipe.id}}">
                     Adicionar ingrediente
                 </button>
             </div>
@@ -199,6 +199,68 @@
                         <button type="button" class="btn btn-danger confirm-delete-button">Remover</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal de inclusão de ingrediente -->
+        <div class="modal fade" id="newRecipeItemModal"tabindex="-1" aria-labelledby="newRecipeItemModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="newRecipeItemForm" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newRecipeItemModalLabel">Adicionar ingrediente</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="new-recipe-item-ingredient" class="form-label">Ingrediente</label>
+                            <select name="ingredient" id="new-recipe-item-ingredient" class="form-select" required>
+                                <option value="" disabled selected>Selecione o ingrediente</option>
+                            </select>
+                            <div class="invalid-feedback" id="new-recipe-item-ingredient-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="new-recipe-item-quantity" class="form-label">Quantidade</label>
+                            <input type="number" name="quantity" id="new-recipe-item-quantity" class="form-control"
+                                step="0.01" min="0" />
+                            <div class="invalid-feedback" id="new-recipe-item-quantity-error"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="new-recipe-item-unit" class="form-label">Unidade de medida</label>
+                            <select name="unitOfMeasure" id="new-recipe-item-unit" class="form-select" required>
+                                <option value="" disabled selected>Selecione a unidade</option>
+                                <option value="1">Quilograma (kg)</option>
+                                <option value="2">Grama (g)</option>
+                                <option value="3">Miligrama (mg)</option>
+                                <option value="4">Litro (L)</option>
+                                <option value="5">Mililitro (mL)</option>
+                                <option value="6">Colher de chá</option>
+                                <option value="7">Colher de sopa</option>
+                                <option value="8">Colher de sobremesa</option>
+                                <option value="9">Xícara</option>
+                                <option value="10">Unidade (un)</option>
+                                <option value="11">Pitada</option>
+                                <option value="12">Copo americano</option>
+                                <option value="13">Concha</option>
+                            </select>
+                            <div class="invalid-feedback" id="new-recipe-item-unit-error"></div>
+                        </div>
+
+                        <div class="alert alert-danger d-none" id="new-recipe-item-general-error"></div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Descartar e fechar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="newBtnSaveRecipeItem">
+                            Salvar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -315,6 +377,7 @@
     <script src="{% static 'js/modals/delete.js' %}"></script>
     <script src="{% static 'js/modals/recipe/edit.js' %}"></script>
     <script src="{% static 'js/modals/new.js' %}"></script>
+    <script src="{% static 'js/modals/recipe-item/new.js' %}"></script>
     <script src="{% static 'js/modals/recipe-item/edit.js' %}"></script>
 </body>
 
