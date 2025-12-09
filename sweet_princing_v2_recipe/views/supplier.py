@@ -45,6 +45,20 @@ def supplier_recover(request):
 
 
 @login_required
+@require_GET
+def supplier_search(request):
+    query = request.GET.get("q", "")
+    suppliers = Supplier.objects.for_user(request.user).order_by("name")
+    if (query):
+        suppliers = suppliers.filter(name__icontains=query)
+    suppliers_data = list(suppliers.values("id", "name"))
+    return JsonResponse({
+        "ok": True,
+        "suppliers": suppliers_data
+    })
+
+
+@login_required
 @require_POST
 def supplier_update(request, pk: int):
     supplier = get_object_or_404(Supplier, pk=pk)
