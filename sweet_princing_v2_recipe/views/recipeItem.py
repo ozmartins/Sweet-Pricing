@@ -1,10 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import RecipeItem
 from ..forms import RecipeItemForm
 
 
+@login_required
 @require_POST
 def recipe_item_create(request):
     form = RecipeItemForm(request.POST)    
@@ -20,6 +22,7 @@ def recipe_item_create(request):
         })
 
 
+@login_required
 @require_POST
 def recipe_item_update(request, pk: int):
     recipeItem = get_object_or_404(RecipeItem, pk=pk)
@@ -30,6 +33,7 @@ def recipe_item_update(request, pk: int):
     return JsonResponse({"ok": True, "id": recipeItem.pk})
 
 
+@login_required
 @require_POST
 def recipe_item_delete(_, pk: int):
     recipeItem = get_object_or_404(RecipeItem, pk=pk)

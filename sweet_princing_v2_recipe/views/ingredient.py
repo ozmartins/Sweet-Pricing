@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import Ingredient
 from ..forms import IngredientForm
 
 
+@login_required
 @require_POST
 def ingredient_create(request):
     form = IngredientForm(request.POST)
@@ -24,6 +26,7 @@ def ingredient_create(request):
         })
 
 
+@login_required
 @require_GET
 def ingredient_recover(request):
     query = request.GET.get("q", "")
@@ -41,6 +44,7 @@ def ingredient_recover(request):
     })
 
 
+@login_required
 @require_GET
 def ingredient_search(request):
     query = request.GET.get("q", "")
@@ -54,6 +58,7 @@ def ingredient_search(request):
     })
 
 
+@login_required
 @require_POST
 def ingredient_update(request, pk: int):
     ingredient = get_object_or_404(Ingredient, pk=pk)
@@ -64,6 +69,7 @@ def ingredient_update(request, pk: int):
     return JsonResponse({"ok": True, "id": ingredient.pk, "name": ingredient.name})
 
 
+@login_required
 @require_POST
 def ingredient_delete(request, pk: int):
     ingredient = get_object_or_404(Ingredient, pk=pk)

@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import Supplier
 from ..forms import SupplierForm
 
 
+@login_required
 @require_POST
 def supplier_create(request):
     form = SupplierForm(request.POST)
@@ -22,6 +24,7 @@ def supplier_create(request):
         })
 
 
+@login_required
 @require_GET
 def supplier_recover(request):
     query = request.GET.get("q", "")
@@ -39,6 +42,7 @@ def supplier_recover(request):
     })
 
 
+@login_required
 @require_POST
 def supplier_update(request, pk: int):
     supplier = get_object_or_404(Supplier, pk=pk)
@@ -49,6 +53,7 @@ def supplier_update(request, pk: int):
     return JsonResponse({"ok": True, "id": supplier.pk, "name": supplier.name})
 
 
+@login_required
 @require_POST
 def supplier_delete(request, pk: int):
     supplier = get_object_or_404(Supplier, pk=pk)

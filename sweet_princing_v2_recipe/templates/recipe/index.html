@@ -47,9 +47,27 @@
                     </li>
                 </ul>
 
-                <div class="ms-lg-3">
-                    <button class="btn btn-light fw-bold rounded-circle btn-sm" type="button">OS</button>
+                <div class="dropdown ms-lg-3">
+                    <button class="btn btn-light fw-bold rounded-circle btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        👤
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-header">
+                            Logado como <strong>{{ user.username }}</strong>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger fw-bold" href="/accounts/logout/">
+                                🚪 Sair
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+
             </div>
         </div>
     </nav>

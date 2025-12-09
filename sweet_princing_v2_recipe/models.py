@@ -1,7 +1,20 @@
 from django.db import models
+from django.conf import settings
 
 
-class Product(models.Model):    
+class OwnedModel(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Product(OwnedModel):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)    
 
@@ -10,7 +23,7 @@ class Product(models.Model):
         verbose_name_plural = "Produtos"
 
 
-class Ingredient(models.Model):
+class Ingredient(OwnedModel):
     name = models.CharField(max_length=100)
     lastCost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
@@ -19,7 +32,7 @@ class Ingredient(models.Model):
         verbose_name_plural = "Ingredientes"
 
 
-class Recipe(models.Model):    
+class Recipe(OwnedModel):    
     product = models.OneToOneField(
         Product,
         on_delete=models.CASCADE,
@@ -36,7 +49,7 @@ class Recipe(models.Model):
         verbose_name_plural = "Receitas"
 
 
-class RecipeItem(models.Model):
+class RecipeItem(OwnedModel):
     UNIT_CHOICES = [
         (1, 'Quilograma'),
         (2, 'Grama'),
@@ -76,14 +89,14 @@ class RecipeItem(models.Model):
         verbose_name_plural = "Ingredientes"
 
 
-class Supplier(models.Model):
+class Supplier(OwnedModel):
     name = models.CharField(max_length=100)
     class Meta:
         verbose_name = "Fornecedor"
         verbose_name_plural = "Fornecedores"
 
 
-class Purchase(models.Model):
+class Purchase(OwnedModel):
     supplier = models.ForeignKey(
         'Supplier',
         on_delete=models.RESTRICT
@@ -96,7 +109,7 @@ class Purchase(models.Model):
         verbose_name_plural = "Compras"
 
 
-class PurchaseItem(models.Model):
+class PurchaseItem(OwnedModel):
     UNIT_CHOICES = [
         (1, 'Quilograma'),
         (2, 'Grama'),

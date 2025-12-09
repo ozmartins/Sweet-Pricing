@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import Recipe, RecipeItem, Product
 from ..forms import RecipeForm
 
 
+@login_required
 @require_POST
 def recipe_create(request):
     form = RecipeForm(request.POST)
@@ -21,6 +23,7 @@ def recipe_create(request):
         })
 
 
+@login_required
 @require_GET
 def recipe_recover(request, pk:int):    
     product = Product.objects.all().filter(id=pk).first()    
@@ -37,6 +40,7 @@ def recipe_recover(request, pk:int):
     })
 
 
+@login_required
 @require_POST
 def recipe_update(request, pk: int):
     recipe = get_object_or_404(Recipe, pk=pk)
@@ -47,6 +51,7 @@ def recipe_update(request, pk: int):
     return JsonResponse({"ok": True, "id": recipe.pk})
 
 
+@login_required
 @require_POST
 def recipe_delete(request, pk: int):
     recipe = get_object_or_404(Recipe, pk=pk)
@@ -54,6 +59,7 @@ def recipe_delete(request, pk: int):
     return JsonResponse({ "OK": True })
 
 
+@login_required
 @require_GET
 def recipe_search(request):
     query = request.GET.get("q", "")

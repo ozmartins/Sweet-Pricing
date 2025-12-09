@@ -1,10 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = "sweet_pricing_v2_recipe"
 
 urlpatterns = [
-    path('', views.home, name="home"),
+    path("", views.home, name="home"),
+
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/register/", views.register, name="register"),    
 
     path('product/', views.product_recover, name="product_recover"),
     path('product/search', views.product_search, name="product_search"),

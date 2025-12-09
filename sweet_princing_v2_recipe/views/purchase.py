@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import Purchase
 from ..forms import PurchaseForm
 
 
+@login_required
 @require_POST
 def purchase_create(request):
     form = PurchaseForm(request.POST)
@@ -21,6 +23,7 @@ def purchase_create(request):
         })
 
 
+@login_required
 @require_GET
 def purchase_recover(request):
     query = request.GET.get("q", "")
@@ -38,6 +41,7 @@ def purchase_recover(request):
     })
 
 
+@login_required
 @require_POST
 def purchase_update(request, pk: int):
     purchase = get_object_or_404(Purchase, pk=pk)
@@ -48,6 +52,7 @@ def purchase_update(request, pk: int):
     return JsonResponse({"ok": True, "id": purchase.pk})
 
 
+@login_required
 @require_POST
 def purchase_delete(request, pk: int):
     purchase = get_object_or_404(Purchase, pk=pk)

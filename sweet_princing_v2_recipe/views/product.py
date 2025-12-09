@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required
 from ..models import Product
 from ..forms import ProductForm
 
@@ -24,6 +25,7 @@ def product_create(request):
         })
 
 
+@login_required
 @require_GET
 def product_recover(request):
     query = request.GET.get("q", "")
@@ -41,6 +43,7 @@ def product_recover(request):
     })
 
 
+@login_required
 @require_GET
 def product_search(request):
     query = request.GET.get("q", "")
@@ -54,6 +57,7 @@ def product_search(request):
     })
 
 
+@login_required
 @require_POST
 def product_update(request, pk: int):
     product = get_object_or_404(Product, pk=pk)
@@ -64,6 +68,7 @@ def product_update(request, pk: int):
     return JsonResponse({"ok": True, "id": product.pk, "name": product.name})
 
 
+@login_required
 @require_POST
 def product_delete(request, pk: int):
     product = get_object_or_404(Product, pk=pk)
