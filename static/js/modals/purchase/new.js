@@ -39,6 +39,7 @@ const initNewPurchaseModule = () => {
     });
 
     onEvent(newPurchaseForm, "submit", async evt => {
+        window.alert("submit");
         evt.preventDefault();
         clearNewRecipeErrors();
 
