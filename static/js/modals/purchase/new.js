@@ -39,7 +39,6 @@ const initNewPurchaseModule = () => {
     });
 
     onEvent(newPurchaseForm, "submit", async evt => {
-        window.alert("submit");
         evt.preventDefault();
         clearNewRecipeErrors();
 
@@ -67,7 +66,7 @@ const initNewPurchaseModule = () => {
 
             getNewPurchaseModal().hide();
             showAlertMessage("Registro salvo com sucesso");
-            window.location.href = "/recipe/recover/" + productIdForNewPurchase
+            window.location.reload();
         } catch {
             if (generalError) {
                 generalError.classList.remove("d-none");

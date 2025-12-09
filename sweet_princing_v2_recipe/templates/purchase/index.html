@@ -116,7 +116,7 @@
                             <td>{{entity.supplier.name}}</td>
                             <td class="text-end">{{entity.total}}</td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-outline-info edit-recipe-item"
+                                <button type="button" class="btn btn-sm btn-outline-info edit-purchase"
                                     data-id="{{entity.id}}" data-supplier="{{entity.supplier.id}}">
                                     Alterar
                                 </button>
@@ -211,7 +211,7 @@
         <div class="modal fade" id="newPurchaseModal" tabindex="-1" aria-labelledby="newPurchaseModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
-                <form id="newwPurchaseForm" class="modal-content">
+                <form id="newPurchaseForm" class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="newwPurchaseModalLabel">Nova compra</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -242,35 +242,35 @@
         </div>
 
         <!-- Modal de edição de ingrediente -->
-        <div class="modal fade" id="editRecipeItemModal" tabindex="-1" aria-labelledby="edtRecipeItemLabel"
+        <div class="modal fade" id="editPurchaseItemModal" tabindex="-1" aria-labelledby="edtPurchaseItemLabel"
             aria-hidden="true">
             <div class="modal-dialog">
-                <form id="editRecipeItemForm" class="modal-content">
+                <form id="editPurchaseItemForm" class="modal-content">
                     {% csrf_token %}
-                    <input type="hidden" name="id" id="recipe-item-id">
+                    <input type="hidden" name="id" id="purchase-id">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="edtRecipeItemLabel">Editar registro</h5>
+                        <h5 class="modal-title" id="edtPurchaseItemLabel">Editar registro</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit-recipe-item-ingredient" class="form-label">Ingrediente</label>
-                            <select name="ingredient" id="edit-recipe-item-ingredient" class="form-select" required>
+                            <label for="edit-purchase-ingredient" class="form-label">Ingrediente</label>
+                            <select name="ingredient" id="edit-purchase-ingredient" class="form-select" required>
                                 <option value="" disabled selected>Selecione o ingrediente</option>
                             </select>
-                            <div class="invalid-feedback" id="edit-recipe-item-ingredient-error"></div>
+                            <div class="invalid-feedback" id="edit-purchase-ingredient-error"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="edit-recipe-item-quantity" class="form-label">Quantidade</label>
-                            <input type="number" name="quantity" id="edit-recipe-item-quantity" class="form-control"
+                            <label for="edit-purchase-quantity" class="form-label">Quantidade</label>
+                            <input type="number" name="quantity" id="edit-purchase-quantity" class="form-control"
                                 step="0.01" min="0" />
-                            <div class="invalid-feedback" id="edit-recipe-item-quantity-error"></div>
+                            <div class="invalid-feedback" id="edit-purchase-quantity-error"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="edit-recipe-item-unit" class="form-label">Unidade de medida</label>
-                            <select name="unitOfMeasure" id="edit-recipe-item-unit" class="form-select" required>
+                            <label for="edit-purchase-unit" class="form-label">Unidade de medida</label>
+                            <select name="unitOfMeasure" id="edit-purchase-unit" class="form-select" required>
                                 <option value="" disabled selected>Selecione a unidade</option>
                                 <option value="1">Quilograma (kg)</option>
                                 <option value="2">Grama (g)</option>
@@ -286,15 +286,15 @@
                                 <option value="12">Copo americano</option>
                                 <option value="13">Concha</option>
                             </select>
-                            <div class="invalid-feedback" id="edit-recipe-item-unit-error"></div>
+                            <div class="invalid-feedback" id="edit-purchase-unit-error"></div>
                         </div>
 
-                        <div class="alert alert-danger d-none" id="edit-recipe-item-general-error"></div>
+                        <div class="alert alert-danger d-none" id="edit-purchase-general-error"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Descartar e
                             fechar</button>
-                        <button type="submit" class="btn btn-primary" id="btnRecipeItemSave">Salvar</button>
+                        <button type="submit" class="btn btn-primary" id="btnPurchaseItemSave">Salvar</button>
                     </div>
                 </form>
             </div>
@@ -305,35 +305,35 @@
     </main>
 
     <!-- Modal de edição do cabeçalho da receita -->
-    <div class="modal fade" id="editRecipeModal" tabindex="-1" aria-labelledby="editRecipeModalLabel"
+    <div class="modal fade" id="editPurchaseModal" tabindex="-1" aria-labelledby="editPurchaseModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
-            <form id="editRecipeForm" class="modal-content">
+            <form id="editPurchaseForm" class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editRecipeModalLabel">Nova receita</h5>
+                    <h5 class="modal-title" id="editPurchaseModalLabel">Nova receita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
 
-                    <input type="hidden" class="form-control" id="recipe-id" name="id">
+                    <input type="hidden" class="form-control" id="purchase-id" name="id">
                     <input type="hidden" class="form-control" id="product-id" name="product">
 
                     <div class="mb-3">
-                        <label for="edit-recipe-yields" class="form-label">Rendimento (porções)</label>
-                        <input type="number" class="form-control" id="edit-recipe-yields" name="yields" min="0"
+                        <label for="edit-purchase-yields" class="form-label">Rendimento (porções)</label>
+                        <input type="number" class="form-control" id="edit-purchase-yields" name="yields" min="0"
                             step="0.01">
-                        <div class="invalid-feedback" id="edit-recipe-yields-error"></div>
+                        <div class="invalid-feedback" id="edit-purchase-yields-error"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit-recipe-preptime" class="form-label">Tempo de Preparo (minutos)</label>
-                        <input type="number" class="form-control" id="edit-recipe-preptime"
+                        <label for="edit-purchase-preptime" class="form-label">Tempo de Preparo (minutos)</label>
+                        <input type="number" class="form-control" id="edit-purchase-preptime"
                             name="preparationTimeInMinutes" min="0" step="1">
-                        <div class="invalid-feedback" id="edit-recipe-preptime-error"></div>
+                        <div class="invalid-feedback" id="edit-purchase-preptime-error"></div>
                     </div>
 
-                    <div class="alert alert-danger d-none" id="edit-recipe-general-error"></div>
+                    <div class="alert alert-danger d-none" id="edit-purchase-general-error"></div>
 
                 </div>
 
@@ -341,7 +341,7 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Descartar e fechar
                     </button>
-                    <button type="submit" class="btn btn-primary" id="editBtnSaveRecipe">
+                    <button type="submit" class="btn btn-primary" id="editBtnSavePurchase">
                         Salvar
                     </button>
                 </div>
