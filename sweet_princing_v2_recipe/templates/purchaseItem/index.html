@@ -1,29 +1,290 @@
-{% extends "base.html" %}
-
 {% load static %}
 
-{% block columns_title %}
-<th>#</th>
-<th>Ingrediente</th>
-<th class="text-end">Quantidade</th>
-<th>Unidade medida</th>
-<th class="text-end">Total</th>
-{% endblock %}
+<!doctype html>
+<html lang="pt-BR">
 
-{% block columns_value %}
-<td class="text-muted">{{entity.id}}</td>
-<td>{{entity.ingredient.name}}</td>
-<td>{{entity.quantity}}</td>
-<td>{{ item.get_unitOfMeasure_display }}</td>
-<td>{{entity.total}}</td>
-{% endblock %}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preço Doce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+</head>
 
-{% block actions %}
-<button type="button" class="btn btn-sm btn-outline-info btn-entity-edit" data-id="{{entity.id}}"
-    data-name="{{entity.name}}">
-    Alterar
-</button>
-<button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete" data-id="{{entity.id}}">
-    Remover
-</button>
-{% endblock %}
+<body>
+    {% csrf_token %}
+
+    <!-- Menu -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2"
+                href="{% url 'sweet_pricing_v2_recipe:product_recover' %}">
+                <span
+                    class="bg-white text-primary fw-bold d-inline-flex align-items-center justify-content-center rounded px-2">🧁</span>
+                <span class="fw-bold">Preço doce</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                            href="{% url 'sweet_pricing_v2_recipe:product_recover' %}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                            href="{% url 'sweet_pricing_v2_recipe:purchase_recover' %}">Compras</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                            href="{% url 'sweet_pricing_v2_recipe:pricing_recover' %}">Precificação</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownOthers" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Outras opções</a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownOthers">
+                            <li><a class="dropdown-item"
+                                    href="{% url 'sweet_pricing_v2_recipe:supplier_recover' %}">Fornecedores</a></li>
+                            <li><a class="dropdown-item"
+                                    href="{% url 'sweet_pricing_v2_recipe:ingredient_recover' %}">Ingredientes</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="dropdown ms-lg-3">
+                    <button class="btn btn-light fw-bold rounded-circle btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        👤
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-header">
+                            Logado como <strong>{{ user.username }}</strong>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger fw-bold" href="/accounts/logout/">
+                                🚪 Sair
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <!-- Card de título -->
+        <div class="card mb-4">
+            <div class="card-body d-flex flex-wrap align-items juntify-center-between gap-2">
+                <h1 class="h5 mb-0">Itens comprados</h1>
+            </div>
+        </div>
+
+        {% csrf_token %}
+
+        <!-- Card com campo de busca -->
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <form class="d-flex" method="get" action="">
+                <input type="search" name="q" value="{{ request.GET.q|default:'' }}" class="form-control"
+                    placeholder="Buscar por nome">
+                <button class="btn btn-outline-info ms-2" type="submit">
+                    Buscar
+                </button>
+            </form>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPurchaseItemModal">
+                {{ data.new_button_label }}
+            </button>
+        </div>
+
+        <!-- Tabela de itens comprados -->
+        <div class="card">
+            <div class="table-responsive">
+                <table id="entities-table" class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="text-muted">#</th>
+                            <th>Data</th>
+                            <th>Fornecedor</th>
+                            <th class="text-end">Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if data.entities %}
+                        {% for entity in data.entities %}
+                        <tr data-id="{{entity.id}}">
+                            <td class="text-muted">{{entity.id}}</td>
+                            <td>{{entity.create_at}}</td>
+                            <td>{{entity.supplier.name}}</td>
+                            <td class="text-end">{{entity.total}}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-info edit-purchase"
+                                    data-id="{{entity.id}}" data-supplier="{{entity.supplier.id}}">
+                                    Alterar
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-entity-delete"
+                                    data-id="{{entity.id}}">
+                                    Remover
+                                </button>
+                                <a type="button" class="btn btn-sm btn-outline-primary btn-puchase-itens"
+                                    href="{% url 'sweet_pricing_v2_recipe:purchase_item_recover' entity.id %}">
+                                    Itens
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Barra de paginação dos ingredientes -->
+        {% if data.pagination %}
+        <div class="card-body">
+            <nav>
+                <ul class="pagination mb-0">
+                    {% if data.pagination.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ data.pagination.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                            << </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            << </span>
+                    </li>
+                    {% endif %}
+
+                    {% for num in data.pagination.paginator.page_range %}
+                    {% if num == data.pagination.number %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}">
+                            {{num}}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if data.pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ data.pagination.next_page_number }}{% if request.GET.q %} &q={{ request.GET.q }}{% endif %}">
+                            >>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            >>
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+
+        <!-- Modal de confirmação de remoção ingrediente -->
+        <div class="modal fade confirm-delete-modal" id="confirmDeleteModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-white">
+                        <h5 class="modal-title">Confirma remoção</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Confirma a remoção do registro?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger confirm-delete-button">Remover</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de inclusão de compra -->
+        <div class="modal fade" id="newPurchaseModal" tabindex="-1" aria-labelledby="newPurchaseModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="newPurchaseForm" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="newwPurchaseModalLabel">Nova compra</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="new-purchase-supplier" class="form-label">Fornecedor</label>
+                            <select name="supplier" id="new-purchase-supplier" class="form-select" required>
+                                <option value="" disabled selected>Selecione o fornecedor</option>
+                            </select>
+                            <div class="invalid-feedback" id="new-purchase-supplier-error"></div>
+                        </div>
+
+                        <div class="alert alert-danger d-none" id="new-purchase-general-error"></div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Descartar e fechar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="newBtnSavePurchase">
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal de edição de compra -->
+        <div class="modal fade" id="editPurchaseModal" tabindex="-1" aria-labelledby="edtPurchaseLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="editPurchaseForm" class="modal-content">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="purchase-id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edtPurchaseLabel">Editar compra</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" class="form-control" id="purchase-id" name="id">
+
+                        <div class="mb-3">
+                            <label for="edit-purchase-supplier" class="form-label">Fornecedor</label>
+                            <select name="supplier" id="edit-purchase-supplier" class="form-select" required>
+                                <option value="" disabled selected>Selecione o fornecedor</option>
+                            </select>
+                            <div class="invalid-feedback" id="edit-purchase-supplier-error"></div>
+                        </div>
+
+                        <div class="alert alert-danger d-none" id="edit-purchase-general-error"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Descartar e
+                            fechar</button>
+                        <button type="submit" class="btn btn-primary" id="btnPurchaseSave">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;">
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/helpers.js' %}"></script>
+    <script src="{% static 'js/modals/delete.js' %}"></script>
+    <script src="{% static 'js/modals/purchase/new.js' %}"></script>
+    <script src="{% static 'js/modals/purchase/edit.js' %}"></script>
+</body>
+
+</html>
