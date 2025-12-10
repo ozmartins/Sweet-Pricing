@@ -1,6 +1,6 @@
 from .home import home
 from .user import register, login
-from .pricing import pricing_recover
+from .pricing import pricing_recover, pricing_calculate
 from .product import product_create, product_recover, product_update, product_delete, product_search
 from .supplier import supplier_create, supplier_recover, supplier_update, supplier_delete, supplier_search
 from .recipe import recipe_create, recipe_recover, recipe_update, recipe_delete, recipe_search

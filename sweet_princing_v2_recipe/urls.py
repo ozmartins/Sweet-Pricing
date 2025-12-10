@@ -10,6 +10,7 @@ urlpatterns = [
     path("accounts/register/", views.register, name="register"),    
 
     path('pricing/', views.pricing_recover, name="pricing_recover"),
+    path('pricing/calculate', views.pricing_calculate, name="pricing_calculate"),
 
     path('product/', views.product_recover, name="product_recover"),
     path('product/search', views.product_search, name="product_search"),

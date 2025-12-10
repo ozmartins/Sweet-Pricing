@@ -268,8 +268,6 @@
 </head>
 
 <body>
-    {% csrf_token %}
-
     <!-- Menu -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
         <div class="container">
@@ -328,8 +326,6 @@
     </nav>
 
     <main class="container my-4">
-        {% csrf_token %}
-
         <div class="page-wrapper">
             <header class="page-header">
                 <div>
@@ -342,7 +338,8 @@
 
             <main class="card-cost">
                 <!-- Seleção do produto -->
-                <section class="mb-3">
+                <form id="product-form" class="mb-3" method="post" action="/pricing/calculate">
+                    {% csrf_token %}
                     <h2 class="section-title">
                         <span class="icon">🧁</span>
                         Produto e receita
@@ -351,23 +348,27 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-md-6">
                             <label for="product-select" class="form-label">Produto</label>
-                            <select id="product-select" class="form-select">
+                            <select id="product-select" name="product" class="form-select" required>
                                 <option value="">Selecione um produto</option>
-                                <!-- Ex.: options dinâmicos com Django -->
-                                <!-- {% for product in products %} -->
-                                <!-- <option value="{{ product.id }}">{{ product.name }}</option> -->
-                                <!-- {% endfor %} -->
+                                {% for product in data.products %}
+                                {% if product.id == data.product %}
+                                <option value="{{ product.id }}" selected>{{ product.name }}</option>
+                                {% else %}
+                                <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endif %}
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label d-block">&nbsp;</label>
-                            <button id="btn-calculate" class="btn btn-primary w-100" type="button">
+                            <button id="btn-calculate" class="btn btn-primary w-100" type="submit">
                                 Calcular
                             </button>
                         </div>
                     </div>
-                </section>
+                </form>
+
 
                 <!-- Ingredientes da receita -->
                 <section class="ingredients-wrapper">
@@ -388,16 +389,15 @@
                                 </tr>
                             </thead>
                             <tbody id="ingredients-body">
-                                <!-- Exemplo de linha estática (substituir por dados reais) -->
-                                <!--
-                            <tr>
-                                <td>Açúcar</td>
-                                <td class="text-end">200</td>
-                                <td>g</td>
-                                <td class="text-end">R$ 0,02</td>
-                                <td class="text-end">R$ 4,00</td>
-                            </tr>
-                            -->
+                                {% for item in data.items %}
+                                <tr>
+                                    <td>{{item.ingredient.name}}</td>
+                                    <td class="text-end">{{item.quantity}}</td>
+                                    <td>{{item.get_unitOfMeasure_display}}</td>
+                                    <td class="text-end">{{item.ingredient.lastCost}}</td>
+                                    <td class="text-end">0</td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -428,7 +428,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="recipe-time" class="form-label">Tempo de preparo (min)</label>
-                                <input id="recipe-time" type="number" class="form-control" readonly placeholder="—">
+                                <input id="recipe-time" type="number" class="form-control" readonly
+                                    value="{{data.recipe.preparationTimeInMinutes}}">
                             </div>
                         </div>
 
@@ -503,6 +504,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/helpers.js' %}"></script>
 </body>
 
 </html>

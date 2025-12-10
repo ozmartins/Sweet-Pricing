@@ -288,11 +288,10 @@
                     <div class="col-md-6">
                         <label for="product-select" class="form-label">Produto</label>
                         <select id="product-select" class="form-select">
-                            <option value="">Selecione um produto</option>
-                            <!-- Ex.: options dinâmicos com Django -->
-                            <!-- {% for product in products %} -->
-                            <!-- <option value="{{ product.id }}">{{ product.name }}</option> -->
-                            <!-- {% endfor %} -->
+                            <option value="">Selecione um produto</option>                            
+                            {% for product in products %}
+                            <option value="{{ product.id }}">{{ product.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
